@@ -27,10 +27,8 @@ public class ViewYourPendingServlet extends HttpServlet {
 		ReimbursementDAO rdao = new ReimbursementDAO();
 		PrintWriter pw = response.getWriter();
 		
-		String author = request.getParameter("author");
-		UserDAO edao = new UserDAO();
-		Users user = edao.getUserByName(author);
-		List<Reimbursement> reim = (List<Reimbursement>) rdao.getPendingReimbursementsByAuthor(user);
+		Users author = (Users) request.getSession().getAttribute("user");
+		List<Reimbursement> reim = (List<Reimbursement>) rdao.getPendingReimbursementsByAuthor(author);
 		
 		
 		response.setContentType("text/html");
@@ -62,6 +60,7 @@ public class ViewYourPendingServlet extends HttpServlet {
 							"<li><b>Amount: </b>" + reim.get(i).getAmount() + "</li>" +
 							"<li><b>Timestamp: </b>" + reim.get(i).getSubmitted() + "</li>" +
 							"<li><b>Status: </b>" + reim.get(i).getStatus() + "</li>" +
+							"<li><b>Image: </b>" + reim.get(i).getReceipt() + "</li>" +
 						"</ul>\n" +
 					"</body>\n" +
 					"</html>\n"

@@ -28,6 +28,20 @@ public class ViewAllResolvedServlet extends HttpServlet {
 		
 		response.setContentType("text/html");
 		
+		if(list.size() == 0) {
+			pw.println( "<!DOCTYPE html>\n" +
+					"<html>\n" +
+					"<head>\n" +
+						"<meta charset=\"UTF-8\">\n" +
+						"<title>Reimbursements</title>\n" +
+					"</head>\n" + 
+					"<body>\n" +
+					"None Found" +
+					"</body>\n" +
+					"</html>\n"
+			);
+		}
+		
 		for (int i = 0; i < list.size(); i++) {
 			pw.println( "<!DOCTYPE html>\n" +
 					"<html>\n" +
@@ -42,6 +56,7 @@ public class ViewAllResolvedServlet extends HttpServlet {
 							"<li><b>Amount: </b>" + list.get(i).getAmount() + "</li>" +
 							"<li><b>Timestamp: </b>" + list.get(i).getSubmitted() + "</li>" +
 							"<li><b>Status: </b>" + list.get(i).getStatus() + "</li>" +
+							"<li><b>Image: </b>" + list.get(i).getReceipt() + "</li>" +
 						"</ul>\n" +
 					"</body>\n" +
 					"</html>\n"

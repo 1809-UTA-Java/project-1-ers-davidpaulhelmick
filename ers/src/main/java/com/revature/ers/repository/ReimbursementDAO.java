@@ -12,7 +12,9 @@ import javax.imageio.ImageIO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
 
 import com.revature.ers.model.Users;
@@ -61,7 +63,7 @@ public class ReimbursementDAO {
 	
 	public List<Reimbursement> getPendingReimbursements() {
 		Session session = HibernateUtil.getSession();
-		return session.createQuery("from Reimbursement e where e.type = :pending").setParameter("pending", status(0)).list();
+		return session.createQuery("from Reimbursement e where e.status = :pending").setParameter("pending", status(0)).list();
 	}
 	
 	public List<Reimbursement> getResolvedReimbursements() {;
@@ -77,17 +79,18 @@ public class ReimbursementDAO {
 	
 	public List<Reimbursement> getPendingReimbursementsByAuthor(Users author) {
 		Session session = HibernateUtil.getSession();
-		return session.createQuery("from Reimbursement where author = :author_id AND status = :pending").setParameter("author_id", author).setParameter("pending", status(0)).list();
+		return session.createQuery("from Reimbursement where author = :author_id and status = :pending").setParameter("author_id", author).setParameter("pending", status(0)).list();
 	}
 	
 	public List<Reimbursement> getResolvedReimbursementsByAuthor(Users author) {;
 		Session session = HibernateUtil.getSession();
 		Criteria criteria = session.createCriteria(Reimbursement.class);
 		Disjunction or = Restrictions.disjunction();
-		or.add(Restrictions.eq("author", author));
+		Criterion aut = Restrictions.eq("author", author);
 		or.add(Restrictions.eq("status", status(1)));
 		or.add(Restrictions.eq("status", status(2)));
-		criteria.add(or);
+		LogicalExpression andExp = Restrictions.and(aut, or);
+		criteria.add(andExp);
 		
 		return criteria.list();
 	}

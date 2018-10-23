@@ -46,22 +46,22 @@ public class ReimbursementDAO {
 	
 	public ReimbursementStatus status(Integer statusNum) {
 		Session session = HibernateUtil.getSession();
-		return (ReimbursementStatus) session.createQuery("from ReimbursementStatus rs where rs.rsId=:num").setInteger("num", statusNum);
+		return (ReimbursementStatus) session.createQuery("from ReimbursementStatus rs where rs.rID=:num").setInteger("num", statusNum).list().get(0);
 	}
 	
 	public ReimbursementType type(Integer typeNum) {
 		Session session = HibernateUtil.getSession();
-		return (ReimbursementType) session.createQuery("from ReimbursementType rt where rt.rtId=:num").setInteger("num", typeNum).list().get(0);
+		return (ReimbursementType) session.createQuery("from ReimbursementType rt where rt.rID=:num").setInteger("num", typeNum).list().get(0);
 	}
 	
 	public List<Reimbursement> getReimbursementsByAuthor(Users author) {
 		Session session = HibernateUtil.getSession();
-		return session.createQuery("from Reimbursements where author = :author_id").setParameter("author_id", author).list();
+		return session.createQuery("from Reimbursement e where e.author = :author_id").setParameter("author_id", author).list();
 	}
 	
 	public List<Reimbursement> getPendingReimbursements() {
 		Session session = HibernateUtil.getSession();
-		return session.createQuery("from Reimbursements where status = :pending").setParameter("pending", status(0)).list();
+		return session.createQuery("from Reimbursement e where e.type = :pending").setParameter("pending", status(0)).list();
 	}
 	
 	public List<Reimbursement> getResolvedReimbursements() {;
@@ -77,7 +77,7 @@ public class ReimbursementDAO {
 	
 	public List<Reimbursement> getPendingReimbursementsByAuthor(Users author) {
 		Session session = HibernateUtil.getSession();
-		return session.createQuery("from Reimbursements where author = :author_id AND status = :pending").setParameter("author_id", author).setParameter("pending", status(0)).list();
+		return session.createQuery("from Reimbursement where author = :author_id AND status = :pending").setParameter("author_id", author).setParameter("pending", status(0)).list();
 	}
 	
 	public List<Reimbursement> getResolvedReimbursementsByAuthor(Users author) {;
@@ -92,13 +92,14 @@ public class ReimbursementDAO {
 		return criteria.list();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Reimbursement getRimbursementById(String reimId) {
 		Session session = HibernateUtil.getSession();
 		Reimbursement reim = null;
 		List<Reimbursement> reimList = new ArrayList<Reimbursement>();
 		
 		reimList = (List<Reimbursement>) session.createQuery(
-				"from Reimbursements where id = :reimId")
+				"from Reimbursement where rID = :reimId")
 				.setString("reimId", reimId).list();
 		if (!reimList.isEmpty()) {
 			reim = reimList.get(0);
@@ -119,7 +120,7 @@ public class ReimbursementDAO {
 		List<Reimbursement> reimList = new ArrayList<Reimbursement>();
 		
 		reimList = (List<Reimbursement>) session.createQuery(
-				"from Reimbursements where id = :reimId")
+				"from Reimbursement where rID = :reimId")
 				.setInteger("reimId", reim.getrID()).list();
 		if (!reimList.isEmpty()) {
 			reim = reimList.get(0);

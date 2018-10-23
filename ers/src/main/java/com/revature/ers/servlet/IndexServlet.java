@@ -3,7 +3,6 @@ package com.revature.ers.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,10 +13,10 @@ import com.revature.ers.model.Users;
 import com.revature.ers.repository.UserDAO;
 
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public LoginServlet() {
+    public IndexServlet() {
         super();
     }
 
@@ -48,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 			}
 			else {
 				req.getSession().setAttribute("user", user);
-				if (user.getUserRole().equals(edao.role(0))){
+				if (user.getUserRole().getRoles().equals("employee")){
 					request.getRequestDispatcher("employee-homepage.html").include(request, response);
 				}
 				else

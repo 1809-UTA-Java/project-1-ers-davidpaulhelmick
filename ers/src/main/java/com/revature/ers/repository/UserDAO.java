@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.revature.ers.model.ReimbursementStatus;
 import com.revature.ers.model.UserRole;
 import com.revature.ers.model.Users;
 import com.revature.ers.util.HibernateUtil;
@@ -22,7 +21,7 @@ public class UserDAO {
 		
 		Session session = HibernateUtil.getSession();
 		
-		users = session.createQuery("from Users e where e.id=:eId").setInteger("eId", employeeId).list();
+		users = session.createQuery("from Users e where e.userID=:eId").setInteger("eId", employeeId).list();
 		if (users.isEmpty()) {
 			return null;
 		}
@@ -61,7 +60,7 @@ public class UserDAO {
 	
 	public UserRole role(Integer statusNum) {
 		Session session = HibernateUtil.getSession();
-		return (UserRole) session.createQuery("from UserRole rs where rs.rsId=:num").setInteger("num", statusNum);
+		return (UserRole) session.createQuery("from UserRole rs where rs.urID=:num").setInteger("num", statusNum).list().get(0);
 	}
 
 }

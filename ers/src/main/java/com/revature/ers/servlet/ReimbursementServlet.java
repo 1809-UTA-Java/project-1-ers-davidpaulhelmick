@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.UUID;
+//import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-//import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 
 import com.revature.ers.model.Reimbursement;
 import com.revature.ers.model.Users;
@@ -37,23 +37,21 @@ public class ReimbursementServlet extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		ReimbursementDAO rdao = new ReimbursementDAO();
 		Timestamp time = new Timestamp(System.currentTimeMillis());
-		String reimbursementId = UUID.randomUUID().toString();
+//		String reimbursementId = UUID.randomUUID().toString();
 		
 		String amount = request.getParameter("amount");
 		String description = request.getParameter("description");
+		Users employee = (Users) request.getSession().getAttribute("user");
 		Part filePart = request.getPart("receipt");
 		byte[] image = null;
 		
 		InputStream inputStream = filePart.getInputStream();
+		Reimbursement newReimbursement = new Reimbursement(Double.parseDouble(amount), description, time, null, employee, null, rdao.type(0), rdao.status(0));
 		
-		Users employee = (Users) request.getSession().getAttribute("user");
-		
-		Reimbursement newReimbursement = new Reimbursement(Integer.parseInt(reimbursementId), Double.parseDouble(amount), description, time, null, employee, null, rdao.type(0), rdao.status(0));
-		
-//		if (filePart != null) {
-//			image = IOUtils.toByteArray(inputStream);
-//			newReimbursement.setReceipt(image);
-//		}
+		if (filePart != null) {
+			image = IOUtils.toByteArray(inputStream);
+			newReimbursement.setReceipt(image);
+		}
 		
 		rdao.saveReimbursement(newReimbursement);
 		

@@ -4,15 +4,20 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "REIMBURSEMENTS")
 public class Reimbursement {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REIMBURSEMENTS_SEQ")
+    @SequenceGenerator(name = "REIMBURSEMENTS_SEQ", sequenceName = "SEQUENCE_REIMBURSEMENTS")
 	@Column(name = "R_ID")
 	private int rID;
 
@@ -32,19 +37,19 @@ public class Reimbursement {
 	private Timestamp resolved;
 
 	@ManyToOne
-	@JoinColumn(name = "USERROLES")
+	@JoinColumn(name = "u_id_author")
 	private Users author;
 
 	@ManyToOne
-	@JoinColumn(name = "USERROLES")
+	@JoinColumn(name = "u_id_resolver")
 	private Users resolver;
 
 	@ManyToOne
-	@JoinColumn(name = "REIMBURSEMENTTYPE")
+	@JoinColumn(name = "RT_ID")
 	private ReimbursementType type;
 
 	@ManyToOne
-	@JoinColumn(name = "REIMBURSEMENTSTATUS")
+	@JoinColumn(name = "RS_ID")
 	private ReimbursementStatus status;
 
 	public Reimbursement(int rID, double amount, String description, Timestamp submitted, Timestamp resolved,
@@ -63,6 +68,19 @@ public class Reimbursement {
 
 	public Reimbursement() {
 		super();
+	}
+
+	public Reimbursement(double amount, String description, Timestamp submitted, Timestamp resolved,
+			Users author, Users resolver, ReimbursementType type, ReimbursementStatus status) {
+		super();
+		this.amount = amount;
+		this.description = description;
+		this.submitted = submitted;
+		this.resolved = resolved;
+		this.author = author;
+		this.resolver = resolver;
+		this.type = type;
+		this.status = status;
 	}
 
 	public int getrID() {

@@ -15,11 +15,11 @@ import com.revature.ers.model.Users;
 import com.revature.ers.repository.UserDAO;
 import com.revature.ers.repository.ReimbursementDAO;
 
-@WebServlet("/ViewYourResolved")
-public class ViewYourResolvedServelet extends HttpServlet {
+@WebServlet("/ViewYourPendingServlet")
+public class ViewYourPendingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public ViewYourResolvedServelet() {
+    public ViewYourPendingServlet() {
         super();
     }
 
@@ -30,10 +30,24 @@ public class ViewYourResolvedServelet extends HttpServlet {
 		String author = request.getParameter("author");
 		UserDAO edao = new UserDAO();
 		Users user = edao.getUserByName(author);
-		List<Reimbursement> reim = (List<Reimbursement>) rdao.getResolvedReimbursementsByAuthor(user);
+		List<Reimbursement> reim = (List<Reimbursement>) rdao.getPendingReimbursementsByAuthor(user);
 		
 		
 		response.setContentType("text/html");
+		
+		if(reim.size() == 0) {
+			pw.println( "<!DOCTYPE html>\n" +
+					"<html>\n" +
+					"<head>\n" +
+						"<meta charset=\"UTF-8\">\n" +
+						"<title>Reimbursements</title>\n" +
+					"</head>\n" + 
+					"<body>\n" +
+					"None Found" +
+					"</body>\n" +
+					"</html>\n"
+			);
+		}
 		
 		for (int i = 0; i < reim.size(); i++) {
 			pw.println( "<!DOCTYPE html>\n" +

@@ -23,12 +23,24 @@ public class ViewAccountServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Users user = (Users) request.getSession().getAttribute("user");
-		response.setContentType("text/xml");
-		ObjectMapper om = new XmlMapper();
-		String obj = om.writeValueAsString(user);
+		response.setContentType("text/html");
 		PrintWriter pw = response.getWriter();
-		
-		pw.println(obj);
+		pw.println( "<!DOCTYPE html>\n" +
+				"<html>\n" +
+				"<head>\n" +
+					"<meta charset=\"UTF-8\">\n" +
+					"<title>Employees</title>\n" +
+				"</head>\n" + 
+				"<body>\n" +
+					"<ul><b>User Id: " + String.valueOf(user.getUserID()) + "</b>\n" +
+						"<li><b>User name: </b>" + user.getUsername() +"</li>" +
+						"<li><b>First name: </b>" + user.getFirstName() + "</li>" +
+						"<li><b>Last name: </b>" + user.getLastName() + "</li>" +
+						"<li><b>Email: </b>" + user.getEmail() + "</li>" +
+					"</ul>\n" +
+				"</body>\n" +
+				"</html>\n"
+		);
 		pw.close();
 	}
 

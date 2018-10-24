@@ -55,13 +55,24 @@ public class ViewAllResolvedServlet extends HttpServlet {
 							"<li><b>Description: </b>" + list.get(i).getDescription() +"</li>" +
 							"<li><b>Amount: </b>" + list.get(i).getAmount() + "</li>" +
 							"<li><b>Timestamp: </b>" + list.get(i).getSubmitted() + "</li>" +
-							"<li><b>Status: </b>" + list.get(i).getStatus() + "</li>" +
+							"<li><b>Status: </b>" + list.get(i).getStatus().getrStatus() + "</li>" +
 							"<li><b>Image: </b>" + list.get(i).getReceipt() + "</li>" +
 						"</ul>\n" +
 					"</body>\n" +
 					"</html>\n"
 			);
 		}
+		pw.println( "<!DOCTYPE html>\n" +
+				"<html>\n" +
+				"<head>\n" +
+					"<meta charset=\"UTF-8\">\n" +
+					"<title>Reimbursements</title>\n" +
+				"</head>\n" + 
+				"<body>\n" +
+					"<div><a href='manager-homepage.html'>Back</a></div>" +
+				"</body>\n" +
+				"</html>\n"
+			);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

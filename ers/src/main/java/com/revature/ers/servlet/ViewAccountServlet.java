@@ -26,21 +26,22 @@ public class ViewAccountServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter pw = response.getWriter();
 		pw.println( "<!DOCTYPE html>\n" +
-				"<html>\n" +
-				"<head>\n" +
-					"<meta charset=\"UTF-8\">\n" +
-					"<title>Employees</title>\n" +
-				"</head>\n" + 
-				"<body>\n" +
-					"<ul><b>User Id: " + String.valueOf(user.getUserID()) + "</b>\n" +
-						"<li><b>User name: </b>" + user.getUsername() +"</li>" +
-						"<li><b>First name: </b>" + user.getFirstName() + "</li>" +
-						"<li><b>Last name: </b>" + user.getLastName() + "</li>" +
-						"<li><b>Email: </b>" + user.getEmail() + "</li>" +
-					"</ul>\n" +
-				"</body>\n" +
-				"</html>\n"
-		);
+						"<html>\n" +
+						"<head>\n" +
+							"<meta charset=\"UTF-8\">\n" +
+							"<title>Employees</title>\n" +
+						"</head>\n" + 
+						"<body>\n" +
+							"<ul><b>User Id: " + user.getUserID() + "</b>\n" +
+								"<li><b>User name: </b>" + user.getUsername() +"</li>" +
+								"<li><b>First name: </b>" + user.getFirstName() + "</li>" +
+								"<li><b>Last name: </b>" + user.getLastName() + "</li>" +
+								"<li><b>Email: </b>" + user.getEmail() + "</li>" +
+							"</ul>\n" +
+							"<div><a href='employee-homepage.html'>Back</a></div>" +
+						"</body>\n" +
+						"</html>\n"
+				);
 		pw.close();
 	}
 

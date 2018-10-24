@@ -48,6 +48,17 @@ public class ViewAllAccountsServlet extends HttpServlet {
 					"</html>\n"
 			);
 		}
+		pw.println( "<!DOCTYPE html>\n" +
+				"<html>\n" +
+				"<head>\n" +
+					"<meta charset=\"UTF-8\">\n" +
+					"<title>Reimbursements</title>\n" +
+				"</head>\n" + 
+				"<body>\n" +
+					"<div><a href='manager-homepage.html'>Back</a></div>" +
+				"</body>\n" +
+				"</html>\n"
+			);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

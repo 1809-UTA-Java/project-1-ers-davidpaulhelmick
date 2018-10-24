@@ -1,18 +1,14 @@
 package com.revature.ers.repository;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
 
 import com.revature.ers.model.Users;
@@ -61,7 +57,7 @@ public class ReimbursementDAO {
 	
 	public List<Reimbursement> getPendingReimbursements() {
 		Session session = HibernateUtil.getSession();
-		return session.createQuery("from Reimbursement e where e.type = :pending").setParameter("pending", status(0)).list();
+		return session.createQuery("from Reimbursement e where e.status = :pending").setParameter("pending", status(0)).list();
 	}
 	
 	public List<Reimbursement> getResolvedReimbursements() {;
@@ -77,17 +73,18 @@ public class ReimbursementDAO {
 	
 	public List<Reimbursement> getPendingReimbursementsByAuthor(Users author) {
 		Session session = HibernateUtil.getSession();
-		return session.createQuery("from Reimbursement where author = :author_id AND status = :pending").setParameter("author_id", author).setParameter("pending", status(0)).list();
+		return session.createQuery("from Reimbursement where author = :author_id and status = :pending").setParameter("author_id", author).setParameter("pending", status(0)).list();
 	}
 	
 	public List<Reimbursement> getResolvedReimbursementsByAuthor(Users author) {;
 		Session session = HibernateUtil.getSession();
 		Criteria criteria = session.createCriteria(Reimbursement.class);
 		Disjunction or = Restrictions.disjunction();
-		or.add(Restrictions.eq("author", author));
+		Criterion aut = Restrictions.eq("author", author);
 		or.add(Restrictions.eq("status", status(1)));
 		or.add(Restrictions.eq("status", status(2)));
-		criteria.add(or);
+		LogicalExpression andExp = Restrictions.and(aut, or);
+		criteria.add(andExp);
 		
 		return criteria.list();
 	}
@@ -113,29 +110,5 @@ public class ReimbursementDAO {
 		Transaction tx = session.beginTransaction();
 		session.update(reim);
 		tx.commit();
-	}
-	
-	public void findReceipt(Reimbursement reim, File file) throws IOException {
-		Session session = HibernateUtil.getSession();
-		List<Reimbursement> reimList = new ArrayList<Reimbursement>();
-		
-		reimList = (List<Reimbursement>) session.createQuery(
-				"from Reimbursement where rID = :reimId")
-				.setInteger("reimId", reim.getrID()).list();
-		if (!reimList.isEmpty()) {
-			reim = reimList.get(0);
-		}
-		
-		byte[] image = reim.getReceipt();
-		if (image != null) {
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(image);
-			BufferedImage receipt = ImageIO.read(inputStream); // throws
-			
-			ImageIO.write(receipt, "jpg", file);
-			
-			inputStream.close();
-		}
-		
-		
 	}
 }

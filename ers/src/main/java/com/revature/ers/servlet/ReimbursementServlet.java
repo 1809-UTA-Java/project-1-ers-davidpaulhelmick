@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.commons.io.IOUtils;
+import org.hibernate.engine.jdbc.BlobProxy;
 
 import com.revature.ers.model.Reimbursement;
 import com.revature.ers.model.Users;
@@ -50,7 +51,7 @@ public class ReimbursementServlet extends HttpServlet {
 		
 		if (filePart != null) {
 			image = IOUtils.toByteArray(inputStream);
-			newReimbursement.setReceipt(image);
+			newReimbursement.setReceipt(BlobProxy.generateProxy(image));
 		}
 		
 		rdao.saveReimbursement(newReimbursement);

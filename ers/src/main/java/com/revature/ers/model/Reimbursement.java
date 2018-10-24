@@ -1,5 +1,6 @@
 package com.revature.ers.model;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -28,7 +29,7 @@ public class Reimbursement {
 	private String description;
 	
 	@Column(name = "r_receipt")
-	private byte receipt[];
+	private Blob receipt;
 
 	@Column(name = "R_SUBMITTED")
 	private Timestamp submitted;
@@ -107,11 +108,11 @@ public class Reimbursement {
 		this.description = description;
 	}
 
-	public byte[] getReceipt() {
+	public Blob getReceipt() {
 		return receipt;
 	}
 
-	public void setReceipt(byte[] receipt) {
+	public void setReceipt(Blob receipt) {
 		this.receipt = receipt;
 	}
 

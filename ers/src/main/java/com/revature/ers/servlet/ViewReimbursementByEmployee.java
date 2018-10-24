@@ -25,17 +25,28 @@ public class ViewReimbursementByEmployee extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ReimbursementDAO rdao = new ReimbursementDAO();
-		List<Reimbursement> list = rdao.getPendingReimbursements();
 		PrintWriter pw = response.getWriter();
 		
 		String author = request.getParameter("author");
 		UserDAO edao = new UserDAO();
 		Users user = edao.getUserByName(author);
 		List<Reimbursement> reim = (List<Reimbursement>) rdao.getReimbursementsByAuthor(user);
-		
-//		User user = edao.getEmployeesByName(author);
-		
+				
 		response.setContentType("text/html");
+		
+		if(reim.size() == 0) {
+			pw.println( "<!DOCTYPE html>\n" +
+					"<html>\n" +
+					"<head>\n" +
+						"<meta charset=\"UTF-8\">\n" +
+						"<title>Reimbursements</title>\n" +
+					"</head>\n" + 
+					"<body>\n" +
+					"None Found" +
+					"</body>\n" +
+					"</html>\n"
+			);
+		}
 		
 		for (int i = 0; i < reim.size(); i++) {
 			pw.println( "<!DOCTYPE html>\n" +
@@ -45,16 +56,29 @@ public class ViewReimbursementByEmployee extends HttpServlet {
 						"<title>Reimbursements</title>\n" +
 					"</head>\n" + 
 					"<body>\n" +
-						"<ul>\n" +
+						"<ul><b>Transaction number " + (i+1) + "</b>\n" +
+							"<li><b>ID: </b>" + reim.get(i).getrID() + "</li>\n" +
 							"<li><b>Description: </b>" + reim.get(i).getDescription() +"</li>" +
 							"<li><b>Amount: </b>" + reim.get(i).getAmount() + "</li>" +
 							"<li><b>Timestamp: </b>" + reim.get(i).getSubmitted() + "</li>" +
-							"<li><b>Status: </b>" + reim.get(i).getStatus() + "</li>" +
+							"<li><b>Status: </b>" + reim.get(i).getStatus().getrStatus() + "</li>" +
+							"<li><b>Image: </b>" + reim.get(i).getReceipt() + "</li>" +
 						"</ul>\n" +
 					"</body>\n" +
 					"</html>\n"
 			);
 		}
+		pw.println( "<!DOCTYPE html>\n" +
+				"<html>\n" +
+				"<head>\n" +
+					"<meta charset=\"UTF-8\">\n" +
+					"<title>Reimbursements</title>\n" +
+				"</head>\n" + 
+				"<body>\n" +
+					"<div><a href='manager-homepage.html'>Back</a></div>" +
+				"</body>\n" +
+				"</html>\n"
+			);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

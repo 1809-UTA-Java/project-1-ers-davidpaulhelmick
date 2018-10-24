@@ -27,10 +27,8 @@ public class ViewYourPendingServlet extends HttpServlet {
 		ReimbursementDAO rdao = new ReimbursementDAO();
 		PrintWriter pw = response.getWriter();
 		
-		String author = request.getParameter("author");
-		UserDAO edao = new UserDAO();
-		Users user = edao.getUserByName(author);
-		List<Reimbursement> reim = (List<Reimbursement>) rdao.getPendingReimbursementsByAuthor(user);
+		Users author = (Users) request.getSession().getAttribute("user");
+		List<Reimbursement> reim = (List<Reimbursement>) rdao.getPendingReimbursementsByAuthor(author);
 		
 		
 		response.setContentType("text/html");
@@ -61,12 +59,24 @@ public class ViewYourPendingServlet extends HttpServlet {
 							"<li><b>Description: </b>" + reim.get(i).getDescription() +"</li>" +
 							"<li><b>Amount: </b>" + reim.get(i).getAmount() + "</li>" +
 							"<li><b>Timestamp: </b>" + reim.get(i).getSubmitted() + "</li>" +
-							"<li><b>Status: </b>" + reim.get(i).getStatus() + "</li>" +
+							"<li><b>Status: </b>" + reim.get(i).getStatus().getrStatus() + "</li>" +
+							"<li><b>Image: </b>" + reim.get(i).getReceipt() + "</li>" +
 						"</ul>\n" +
 					"</body>\n" +
 					"</html>\n"
 			);
 		}
+		pw.println( "<!DOCTYPE html>\n" +
+				"<html>\n" +
+				"<head>\n" +
+					"<meta charset=\"UTF-8\">\n" +
+					"<title>Reimbursements</title>\n" +
+				"</head>\n" + 
+				"<body>\n" +
+					"<div><a href='employee-homepage.html'>Back</a></div>" +
+				"</body>\n" +
+				"</html>\n"
+			);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

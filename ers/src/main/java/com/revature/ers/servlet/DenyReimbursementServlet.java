@@ -32,10 +32,10 @@ public class DenyReimbursementServlet extends HttpServlet {
 		
 		Reimbursement reim = rdao.getRimbursementById(reimId);
 		reim.setResolver(resolver);
-		reim.setStatus(rdao.status(1));
+		reim.setStatus(rdao.status(2));
 		rdao.setReimbursement(reim);
 		
 		request.getRequestDispatcher("manager-homepage.html").include(request, response);
-		pw.println("<h4>The request was approved.</h4>");
+		pw.println("<h4>The request was denied.</h4>");
 	}
 }
